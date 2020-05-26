@@ -40,7 +40,7 @@ module.exports = (db) => {
       db.query(
         `
       UPDATE users
-      SET newgames = ARRAY[${oldGames}] || ARRAY[${request.body.scores}]
+      SET newgames =  ARRAY[${request.body.scores}] || ARRAY[${oldGames}] 
       WHERE id = $1::integer
       `,
         [1]
