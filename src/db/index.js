@@ -1,9 +1,8 @@
 const pg = require("pg");
 
 const client = new pg.Client({
-  connectionString:
-    process.env.DATABASE_URL ||
-    `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@localhost:${process.env.PGPORT}/${process.env.PGDATABASE}`,
+  connectionString: process.env.DATABASE_URL || "",
+  // `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@localhost:${process.env.PGPORT}/${process.env.PGDATABASE}`,
 });
 
 client
