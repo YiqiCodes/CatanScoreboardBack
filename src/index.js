@@ -9,11 +9,6 @@ const wss = new WebSocket.Server({ server });
 
 const proxy = require("http-proxy-middleware");
 
-module.exports = function (app) {
-  // add other server routes to path array
-  app.use(proxy(["/api"], { target: "http://localhost:8001" }));
-};
-
 wss.on("connection", (socket) => {
   socket.onmessage = (event) => {
     console.log(`Message Received: ${event.data}`);
