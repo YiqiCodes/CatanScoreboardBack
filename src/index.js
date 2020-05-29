@@ -7,8 +7,6 @@ const server = require("http").Server(app);
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({ server });
 
-const proxy = require("http-proxy-middleware");
-
 wss.on("connection", (socket) => {
   socket.onmessage = (event) => {
     console.log(`Message Received: ${event.data}`);
