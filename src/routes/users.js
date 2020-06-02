@@ -1,19 +1,14 @@
 const router = require("express").Router();
 
 module.exports = (db) => {
-  router.get("/users/:user_id", (request, response) => {
+  router.get("/games/", (request, response) => {
     db.query(
       `
-      SELECT
-        id,
-        user_id,
-        newgames,
-        games,
-        gender        
-      FROM users
-      WHERE user_id = $1::text
-    `,
-      [request.params.user_id]
+      SELECT game_details.score, players.name, game_details.game_id
+      FROM game_details
+      JOIN players ON game_details.player_id = players.id
+    `
+      // [request.params.user_id]
     ).then(({ rows: user }) => {
       response.json(user);
     });

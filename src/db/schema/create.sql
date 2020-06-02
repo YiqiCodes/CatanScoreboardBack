@@ -1,13 +1,29 @@
-DROP TABLE IF EXISTS users
+DROP TABLE IF EXISTS players
+CASCADE;
+DROP TABLE IF EXISTS games
+CASCADE;
+DROP TABLE IF EXISTS game_details
 CASCADE;
 
-
-CREATE TABLE users
+CREATE TABLE players
 (
-  id SERIAL PRIMARY KEY NOT NULL,
-  user_id VARCHAR(255) UNIQUE NOT NULL,
-  newgames integer
-  [][],
-  games json,
-  gender text
+  id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+  name VARCHAR(255)
 );
+
+CREATE TABLE games
+(
+  id SERIAL UNIQUE PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE game_details
+(
+  id SERIAL UNIQUE PRIMARY KEY NOT NULL,
+  player_id int,
+  score int DEFAULT 2,
+  game_id int
+);
+
+ALTER TABLE game_details ADD FOREIGN KEY (player_id) REFERENCES players (id);
+
+ALTER TABLE game_details ADD FOREIGN KEY (game_id) REFERENCES games (id);
