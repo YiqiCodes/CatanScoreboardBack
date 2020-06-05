@@ -30,6 +30,7 @@ module.exports = (db) => {
       RETURNING id;
     `
     ).then((res) => {
+      console.log("res", res);
       db.query(
         `
         INSERT INTO game_details

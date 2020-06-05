@@ -7,18 +7,18 @@ CASCADE;
 
 CREATE TABLE players
 (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   name VARCHAR(255)
 );
 
 CREATE TABLE games
 (
-  id SERIAL PRIMARY KEY NOT NULL
+  id SERIAL PRIMARY KEY
 );
 
 CREATE TABLE game_details
 (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   player_id int,
   score int DEFAULT 2,
   game_id int
