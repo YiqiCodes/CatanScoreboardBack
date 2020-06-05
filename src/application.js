@@ -11,6 +11,7 @@ const app = express();
 const db = require("./db");
 
 const users = require("./routes/users");
+const games = require("./routes/games");
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -52,6 +53,8 @@ module.exports = function application(
   app.use(bodyparser.json());
 
   app.use("/api", users(db));
+
+  app.use("/api", games(db));
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([

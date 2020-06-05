@@ -1,0 +1,86 @@
+const router = require("express").Router();
+
+module.exports = (db) => {
+  router.get("/games", (request, response) => {
+    db.query(
+      `
+    SELECT game_details.score, game_details.game_id, players.name
+    FROM game_details
+    INNER JOIN players ON game_details.player_id = players.id 
+    INNER JOIN games on games.id = game_details.game_id
+  `
+    ).then(({ rows: games }) => {
+      const groupedGames = games.reduce((acc, game) => {
+        if (acc[game.game_id]) {
+          acc[game.game_id].push(game);
+        } else {
+          acc[game.game_id] = [game];
+        }
+        return acc;
+      }, {});
+      response.json(groupedGames);
+    });
+  });
+
+  router.post("/games", (request, response) => {
+    const body = Object.values(request.body);
+    db.query(
+      `
+      INSERT INTO games DEFAULT VALUES;
+    `
+    ).then((res) => {
+      db.query(`
+        INSERT INTO game_details
+        (id, player_id, score, game_id)
+        VALUES
+        (DEFAULT, 1, $1[0], DEFAULT),
+        (DEFAULT, 2, $1[1], DEFAULT)
+        (DEFAULT, 3, $1[2], DEFAULT)
+        (DEFAULT, 4, $1[3], DEFAULT)
+      `),
+        [body];
+    });
+  });
+
+  router.get("/games/total", (request, response) => {
+    db.query(
+      `
+    SELECT game_details.score, players.name, game_details.game_id
+    FROM game_details
+    JOIN players ON game_details.player_id = players.id
+  `
+    ).then(({ rows: games }) => {
+      const gamesPointsWins = [];
+      games.forEach((item) => {
+        const indexOfPlayer = gamesPointsWins.findIndex(
+          (player) => player.name === item.name
+        );
+        if (indexOfPlayer === -1) {
+          // Add player if they haven't been added yet
+          if (item.score === 10) {
+            gamesPointsWins.push({
+              name: item.name,
+              score: item.score,
+              wins: 1,
+            });
+          } else {
+            gamesPointsWins.push({
+              name: item.name,
+              score: item.score,
+              wins: 0,
+            });
+          }
+        } else {
+          // Update player if they've previously been added
+          gamesPointsWins[indexOfPlayer].score += item.score;
+          if (item.score === 10) {
+            gamesPointsWins[indexOfPlayer].wins++;
+          }
+        }
+      });
+      response.json(gamesPointsWins);
+    });
+  });
+
+  return router;
+};
