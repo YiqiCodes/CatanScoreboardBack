@@ -23,22 +23,24 @@ module.exports = (db) => {
   });
 
   router.post("/games", (request, response) => {
-    const body = Object.values(request.body);
+    const score = Object.values(request.body);
     db.query(
       `
-      INSERT INTO games DEFAULT VALUES;
+      INSERT INTO games DEFAULT VALUES
+      RETURNING id;
     `
     ).then((res) => {
-      db.query(`
+      db.query(
+        `
         INSERT INTO game_details
         (id, player_id, score, game_id)
         VALUES
-        (DEFAULT, 1, $1[0], DEFAULT),
-        (DEFAULT, 2, $1[1], DEFAULT)
-        (DEFAULT, 3, $1[2], DEFAULT)
-        (DEFAULT, 4, $1[3], DEFAULT)
-      `),
-        [body];
+        (DEFAULT, 1, ${score[0]}, ${res.rows[0].id}),
+        (DEFAULT, 2, ${score[1]}, ${res.rows[0].id}),
+        (DEFAULT, 3, ${score[2]}, ${res.rows[0].id}),
+        (DEFAULT, 4, ${score[3]}, ${res.rows[0].id})
+      `
+      );
     });
   });
 
