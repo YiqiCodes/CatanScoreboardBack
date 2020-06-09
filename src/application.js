@@ -2,15 +2,14 @@ const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
-const bodyparser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
 
 const app = express();
+const bodyparser = require("body-parser");
 
 const db = require("./db");
 
-const users = require("./routes/users");
 const games = require("./routes/games");
 
 function read(file) {
@@ -38,7 +37,7 @@ module.exports = function application(
     res.header(
       "Access-Control-Allow-Origin",
       "*,",
-      "https://catanscoreboard.herokuapp.com/api/users/adam"
+      "https://catanscoreboard.herokuapp.com/api/games"
     );
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header(
@@ -51,8 +50,6 @@ module.exports = function application(
   app.use(helmet());
 
   app.use(bodyparser.json());
-
-  app.use("/api", users(db));
 
   app.use("/api", games(db));
 
