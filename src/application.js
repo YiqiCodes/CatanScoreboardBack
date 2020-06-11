@@ -39,6 +39,11 @@ module.exports = function application(
       "*,",
       "https://catanscoreboard.herokuapp.com/api/games"
     );
+    res.header(
+      "Access-Control-Allow-Origin",
+      "*,",
+      "https://catanscoreboard.herokuapp.com/api/games/total"
+    );
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header(
       "Access-Control-Allow-Headers",

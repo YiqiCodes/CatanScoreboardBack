@@ -24,6 +24,7 @@ module.exports = (db) => {
 
   router.post("/games", (request, response) => {
     const score = Object.values(request.body);
+    console.log("score", score);
     db.query(
       `
       INSERT INTO games DEFAULT VALUES
@@ -84,5 +85,24 @@ module.exports = (db) => {
     });
   });
 
+  router.delete("/games", (request, response) => {
+    db.query(
+      `
+    DELETE FROM game_details WHERE game_details.game_id = ${request.body.identification};
+    DELETE FROM games WHERE games.id = ${request.body.identification};`
+    ).then((res) => {
+      response.json(res);
+    });
+  });
+
+  router.get("/games/test", (request, response) => {
+    db.query(
+      `
+    SELECT * FROM games    
+  `
+    ).then(({ rows: games }) => {
+      response.json(games);
+    });
+  });
   return router;
 };
